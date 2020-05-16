@@ -1,0 +1,48 @@
+version: "3.8"
+
+#defaults
+########################################################################
+
+x-default-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: 10m
+
+x-default-restart_policy: &default-restart_policy
+  condition: none
+
+x-default-extra_hosts: &default-extra_hosts
+  - "localhostname:localhostip"
+
+#main
+########################################################################
+
+services:
+
+  gixy:
+    image: yandex/gixy:latest
+    volumes:
+      - "/opt/docker-stacks/appscan/persistance/gixy/conf/nginx.conf:/etc/nginx/conf/nginx.conf"
+    command: ["/etc/nginx/conf/nginx.conf"]
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy: *default-restart_policy
+      resources:
+        limits:
+          memory: 128M
+    logging: *default-logging
+    extra_hosts: *default-extra_hosts
+
+  testssl:
+    image: testssl:latest
+    command: ["https://localhostname"]
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy: *default-restart_policy
+      resources:
+        limits:
+          memory: 128M
+    logging: *default-logging
+    extra_hosts: *default-extra_hosts
