@@ -51,8 +51,8 @@ docker stack deploy appscan -c docker-compose.yml
 ```
 When both images are done with their tasks, the Docker Service will show as stopped. This is intentional due to this setting.
 ```yaml
-'x-default-restart_policy: &default-restart_policy
-	condition: none'
+x-default-restart_policy: &default-restart_policy
+	condition: none
 ```
 When the services stop view the logs of each to see the results of your scan. For instance:
 ```sh
